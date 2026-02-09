@@ -1,0 +1,71 @@
+---
+title: "<span style=color:#0A3EAD>__Agencia de Viajes__</span>"
+output: html_document
+---
+
+## Introducción
+
+Conectamos la BBDD de la Agencia de Viajes que se encuentra alojada en MySQL con Rstudio para explorar otra forma de hacer las consultas.
+
+```{r Paquetes}
+library(sqldf)
+library(RODBC)
+
+
+```
+```{r Connection}
+
+bd= odbcConnect("con2",uid = "root", pwd="123Pormi!")
+
+```
+
+
+
+## 1.-¿Cuantos paquetes se han comprado por sexo y año de reserva?
+
+```{r}
+
+
+P_1  <- sqlQuery(bd, "SELECT Genero, EXTRACT(YEAR FROM Fecha_Viaje) AS Ano,
+              count(*) FROM paquete a INNER JOIN reserva b on a.Codigo = b.Reservaid               INNER JOIN cliente c on a.Cliente_ID = c.ID 
+              group by Genero, Ano order by Genero, Ano")
+
+P_1
+```
+## 2.-Enumerar los diferentes destinos elegidos cada año
+```{r}
+P_2  <- sqlQuery(bd, "SELECT DISTINCT destino,EXTRACT(YEAR FROM Fecha_Viaje) as Ano FROM paquete a INNER JOIN reserva b on a.Codigo = b.Reservaid GROUP BY destino, Ano LIMIT 10")
+
+P_2
+```
+
+## 3.-¿Cuántos clientes femeninos entre 18 y 25 años, tomaron como medio de transporte el avión?
+```{r}
+P_3  <- sqlQuery(bd, "SELECT count(*) FROM cliente a INNER JOIN paquete b on a.ID = b.Cliente_ID WHERE Genero = 'F' and Ano_Nacimiento >= 1998 and Ano_Nacimiento <= 2005 and transporte = 'Avion'")
+
+P_3
+
+```
+## 4.-¿Cuál fue el medio de transporte más utilizado por los clientes nacidos en la década de los 60?
+```{r}
+P_4  <- sqlQuery(bd, "SELECT DISTINCT Transporte,  count(*) from paquete a INNER JOIN cliente b on a.Cliente_ID = b.ID where Ano_Nacimiento >= 1960 and Ano_Nacimiento < 1970 group by Transporte order by Transporte")
+
+P_4
+```
+## 5.-¿Cuántos viajes se realizaron en el 2021 con un precio inferior a 1000 y que el código de reserva esté entre el MAD00010 y el MAD00050?
+
+
+```{r}
+P_5 <- sqlQuery(bd, "SELECT * FROM reserva where Fecha_Viaje >= '2021-01-01' and Fecha_Viaje <= '2021-12-31' and Reservaid BETWEEN 'MAD00010' AND 'MAD00050' AND Precio < 1000")
+
+P_5
+
+```
+
+## 6.-Consultar las personas que viaja en grupo de 3 antes del 2022 que pagaron más de 2000 y ordenar el precio de formas descendente
+
+```{r}
+P_6  <- sqlQuery(bd, "SELECT * FROM reserva WHERE Num_Personas = 3 and Fecha_Viaje < '2022-01-01' and Precio > 2000 ORDER BY Precio DESC")
+
+P_6
+```

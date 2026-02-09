@@ -1,5 +1,5 @@
 /* ============================================================================
-   validation_queries.sql — Validation Queries (MySQL)
+   02_validation_queries.sql — Validation Queries (MySQL)
    Schema: Client, Package, Reservation
    ============================================================================ */
 

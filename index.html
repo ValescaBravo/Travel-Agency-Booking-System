@@ -1,1 +1,835 @@
-index
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Business Analysis Case Study — Travel Agency Booking System</title>
+  <meta name="description" content="BA case study: requirements, modelling, ERD evidence, traceability and validation for a Travel Agency Booking System." />
+
+  <!-- Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Primary palette */
+      --navy:#1d085e;
+      --teal:#13d6c1;
+      --teal-dark:#0a9a88;
+      --white:#ffffff;
+      --gray-50:#f8f9fa;
+      --gray-500:#6c757d;
+      --gray-800:#343a40;
+
+      /* Viz palette (colour-blind friendly) */
+      --viz-1:#1d085e;
+      --viz-2:#0a9a88;
+      --viz-3:#ff7043;
+      --viz-4:#ffc107;
+      --viz-5:#78909c;
+      --viz-6:#9c27b0;
+      --viz-7:#4caf50;
+      --viz-8:#e78ac3;
+      --viz-9:#8da0cb;
+      --viz-10:#a6d854;
+
+      /* Type */
+      --font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      --fs-title:24px;
+      --fs-subtitle:18px;
+      --fs-body:16px;
+      --fs-small:14px;
+
+      /* Layout */
+      --maxw: 1040px;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(29,8,94,.08);
+      --shadow-soft: 0 6px 18px rgba(29,8,94,.06);
+      --ring: 0 0 0 4px rgba(19,214,193,.25);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      font-size:var(--fs-body);
+      line-height:1.55;
+      color:var(--gray-800);
+      background:var(--white);
+    }
+
+    a{color:var(--navy); text-decoration:none}
+    a:hover{color:var(--teal-dark)}
+    a:focus{outline:none; box-shadow:var(--ring); border-radius:10px}
+
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:28px 18px 84px;}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding:10px 0 18px;
+      border-bottom:1px solid rgba(52,58,64,.12);
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-weight:800; letter-spacing:-.02em; color:var(--navy);
+    }
+    .badge{
+      width:34px; height:34px; border-radius:12px;
+      background:linear-gradient(135deg, rgba(19,214,193,.22), rgba(29,8,94,.10));
+      border:1px solid rgba(29,8,94,.14);
+      display:grid; place-items:center;
+      color:var(--navy);
+      font-weight:900;
+    }
+    .nav{
+      display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end;
+      font-size:var(--fs-small);
+    }
+    .nav a{
+      padding:8px 10px; border-radius:12px;
+      border:1px solid rgba(29,8,94,.14);
+      background:rgba(248,249,250,.7);
+    }
+    .nav a:hover{border-color:rgba(10,154,136,.35); background:rgba(19,214,193,.10)}
+
+    .hero{
+      margin-top:22px;
+      padding:22px 22px 18px;
+      border-radius:var(--radius);
+      border:1px solid rgba(29,8,94,.12);
+      background:
+        radial-gradient(900px 260px at 10% 0%, rgba(19,214,193,.20), transparent 55%),
+        radial-gradient(700px 240px at 100% 10%, rgba(29,8,94,.10), transparent 55%),
+        #fff;
+      box-shadow:var(--shadow);
+    }
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      font-size:var(--fs-small);
+      color:rgba(29,8,94,.78);
+      font-weight:700;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(19,214,193,.14);
+      border:1px solid rgba(19,214,193,.30);
+    }
+    h1{
+      margin:12px 0 8px;
+      font-size:40px;
+      line-height:1.12;
+      letter-spacing:-.03em;
+      color:var(--navy);
+    }
+    .subtitle{
+      margin:0;
+      font-size:var(--fs-subtitle);
+      color:rgba(52,58,64,.78);
+      max-width:78ch;
+    }
+    .meta{
+      margin-top:14px;
+      display:flex; flex-wrap:wrap; gap:8px;
+    }
+    .chip{
+      font-size:var(--fs-small);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(52,58,64,.16);
+      background:rgba(248,249,250,.85);
+      color:rgba(52,58,64,.88);
+    }
+    .chip strong{color:var(--navy)}
+    .cta-row{margin-top:16px; display:flex; flex-wrap:wrap; gap:10px}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:700;
+      border:1px solid rgba(29,8,94,.16);
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(19,214,193,.22), rgba(19,214,193,.10));
+      border-color:rgba(10,154,136,.28);
+      color:var(--navy);
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+
+    .grid{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap:16px;
+    }
+    @media (max-width: 940px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid rgba(29,8,94,.12);
+      border-radius:var(--radius);
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+      padding:18px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:22px;
+      letter-spacing:-.02em;
+      color:var(--navy);
+    }
+    .card h3{
+      margin:18px 0 8px;
+      font-size:18px;
+      letter-spacing:-.01em;
+      color:var(--navy);
+    }
+    .card p{margin:0 0 10px}
+    .muted{color:rgba(52,58,64,.72)}
+    .small{font-size:var(--fs-small)}
+    .callout{
+      border-radius:16px;
+      padding:12px 14px;
+      border:1px solid rgba(19,214,193,.30);
+      background:rgba(19,214,193,.10);
+      color:rgba(29,8,94,.92);
+    }
+    .callout strong{color:var(--navy)}
+
+    .toc a{display:block; padding:8px 10px; border-radius:14px; border:1px solid rgba(29,8,94,.10); background:rgba(248,249,250,.75)}
+    .toc a:hover{border-color:rgba(10,154,136,.35); background:rgba(19,214,193,.08)}
+    .toc{display:grid; gap:8px; margin-top:10px}
+
+    hr.rule{
+      border:none; height:1px;
+      background:rgba(52,58,64,.12);
+      margin:22px 0;
+    }
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:16px;
+      border:1px solid rgba(29,8,94,.12);
+      background:#fff;
+    }
+    th, td{
+      text-align:left;
+      padding:12px 12px;
+      vertical-align:top;
+      border-bottom:1px solid rgba(52,58,64,.10);
+      font-size:var(--fs-small);
+    }
+    th{
+      background:rgba(248,249,250,.85);
+      color:rgba(29,8,94,.92);
+      font-weight:800;
+    }
+    tr:last-child td{border-bottom:none}
+
+    code, pre{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 13px;
+    }
+    pre{
+      margin:10px 0 0;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(29,8,94,.92);
+      color:#fff;
+      overflow:auto;
+      border:1px solid rgba(29,8,94,.35);
+    }
+    .pillrow{display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 2px}
+    .pill{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(29,8,94,.12);
+      background:rgba(248,249,250,.75);
+    }
+    .pill.must{border-color:rgba(10,154,136,.35); background:rgba(19,214,193,.12)}
+    .pill.wont{border-color:rgba(255,112,67,.35); background:rgba(255,112,67,.10)}
+
+    .footer{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid rgba(52,58,64,.12);
+      color:rgba(52,58,64,.70);
+      font-size:var(--fs-small);
+      display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;
+    }
+    .anchor{scroll-margin-top: 18px}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="badge">VB</div>
+        <div>
+          <div style="font-size:14px; opacity:.9;">Case Study</div>
+          <div style="font-size:14px; font-weight:800;">Travel Agency Booking System</div>
+        </div>
+      </div>
+      <div class="nav" aria-label="Quick links">
+        <a href="./assets/erd/ERD.pgerd.png">ERD (PNG)</a>
+        <a href="./src/sql/schema.sql">Schema (SQL)</a>
+        <a href="./src/sql/validation_queries.sql">Validation &amp; Reporting Queries (SQL)</a>
+        <a href="#traceability">Traceability</a>
+        <a href="#validation">Validation</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="kicker">Business Analysis • Requirements → Data Model → Validation</div>
+      <h1>Business Analysis Case Study — Travel Agency Booking System</h1>
+      <p class="subtitle">
+        A concise BA-style case study demonstrating how core booking requirements were captured,
+        modelled, and validated through an ERD and a relational schema (PostgreSQL implementation), with traceability
+        from requirements to constraints and test queries.
+      </p>
+
+      <div class="meta">
+        <span class="chip"><strong>Domain:</strong> Travel booking (simulated)</span>
+        <span class="chip"><strong>Artefacts:</strong> ERD • schema • rules • RTM</span>
+        <span class="chip"><strong>DB:</strong> PostgreSQL</span>
+        <span class="chip"><strong>Tools:</strong> pgAdmin 4 • PostgreSQL • SQL</span>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn primary" href="#executive-summary">Read the case study</a>
+        <a class="btn" href="./assets/ERD.pgerd.png">View ERD (PNG)</a>
+        <a class="btn" href="./src/schema.sql">Open Schema (SQL)</a>
+      </div>
+    </section>
+
+    <div class="grid">
+      <main class="card">
+        <h2 id="executive-summary" class="anchor">Executive Summary</h2>
+        <ul class="small" style="margin:0 0 6px 18px;">
+          <li><strong>Objective:</strong> translate a hypothetical travel agency’s booking needs into a structured relational data model that supports operational workflows and reporting.</li>
+          <li><strong>Scope:</strong> customer profiles, travel packages, and reservations — from business rules → ERD → relational schema → integrity constraints → query-ready SQL.</li>
+          <li><strong>Approach:</strong> captured core rules and relationships, designed an ER model, mapped it to a relational model, and validated integrity through key checks and edge-case queries.</li>
+          <li><strong>Tools:</strong> pgAdmin 4 (ERD tool), PostgreSQL (implementation), SQL (validation and reporting queries).</li>
+          <li><strong>Deliverables:</strong> ERD diagram, relational schema, data dictionary (summary), integrity rules/constraints, and a traceability mini-matrix (RTM).</li>
+          <li><strong>Evidence:</strong> ERD evidence (PNG + pgAdmin .pgerd file) and SQL scripts (schema + validation/reporting queries).</li>
+        </ul>
+
+        <hr class="rule" />
+
+        <h2 id="context" class="anchor">Business Context & Goals</h2>
+        <p>
+          A travel agency needs a simple, reliable way to store and retrieve booking information. The system must support a basic
+          booking lifecycle: capturing <strong>client details</strong>, associating a <strong>travel package</strong> to a client, and recording a
+          <strong>reservation</strong> for that package. The data model should minimise ambiguity (who purchased what, and which reservation belongs to which package)
+          and be structured to answer common operational and reporting questions.
+        </p>
+        <p class="muted small" style="margin-top:8px;">
+          Note: this is an academic case study with a simulated business context; outcomes focus on design decisions and validation results rather than operational impact claims.
+        </p>
+
+        <h3>Proposed KPIs (for reporting; not measured here)</h3>
+        <div class="pillrow">
+          <span class="pill">Bookings volume (reservations/month)</span>
+          <span class="pill">Average booking value</span>
+          <span class="pill">Repeat purchasing (packages/client)</span>
+          <span class="pill">Data completeness (% optional fields)</span>
+          <span class="pill">Integrity health (orphan counts)</span>
+        </div>
+
+        <hr class="rule" />
+
+        <h2 id="stakeholders" class="anchor">Stakeholders & Pain Points</h2>
+        <table aria-label="Stakeholders and pain points">
+          <thead>
+            <tr>
+              <th style="width:26%">Stakeholder</th>
+              <th style="width:34%">Needs</th>
+              <th>Pain points addressed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Booking Agent / Sales</strong></td>
+              <td>Create clients, create packages, record reservations quickly</td>
+              <td>Duplicate IDs, unclear links between package and reservation, missing required fields</td>
+            </tr>
+            <tr>
+              <td><strong>Operations Manager</strong></td>
+              <td>Visibility on booking volumes and destinations</td>
+              <td>Inability to answer basic counts/trends consistently</td>
+            </tr>
+            <tr>
+              <td><strong>Finance</strong></td>
+              <td>Consistent price storage and queryability</td>
+              <td>Float usage for money, inconsistent price formats (mitigated by recommending DECIMAL)</td>
+            </tr>
+            <tr>
+              <td><strong>Customer Support</strong></td>
+              <td>Retrieve bookings by client and confirm details</td>
+              <td>Hard to locate “what this client booked” without enforced relationships</td>
+            </tr>
+            <tr>
+              <td><strong>Data / BI Analyst</strong></td>
+              <td>Query-ready schema and stable keys</td>
+              <td>Unreliable keys, type mismatches, inconsistent relationships</td>
+            </tr>
+            <tr>
+              <td><strong>DBA / IT</strong></td>
+              <td>Enforce integrity and keep data clean</td>
+              <td>Orphan records, weak constraints, and inconsistent datatypes</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr class="rule" />
+
+        <h2 id="scope" class="anchor">Scope, Assumptions & Constraints</h2>
+        <div class="grid" style="margin-top:0; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="callout">
+            <strong>In scope</strong>
+            <ul class="small" style="margin:8px 0 0 18px;">
+              <li>Client capture (minimum viable profile)</li>
+              <li>Package definition per purchase (destination + optional transport/accommodation)</li>
+              <li>Reservation linked to the purchased package</li>
+              <li>Relational integrity rules (PK/FK + 0..1 reservation per package)</li>
+              <li>Baseline reporting queries</li>
+            </ul>
+          </div>
+          <div class="callout" style="border-color:rgba(255,112,67,.30); background:rgba(255,112,67,.08);">
+            <strong>Out of scope (this iteration)</strong>
+            <ul class="small" style="margin:8px 0 0 18px;">
+              <li>Payments, refunds, cancellations, modifications, discounts/promotions</li>
+              <li>Inventory/availability (flights/hotels) and supplier integrations</li>
+              <li>Multi-currency, tax, invoicing details</li>
+              <li>Authentication/roles (application layer)</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Assumptions</h3>
+        <ul class="small" style="margin:0 0 0 18px;">
+          <li><strong>ClientID</strong> uniquely identifies a client (passport / national ID style).</li>
+          <li>Each <strong>Package</strong> is linked to a client (a client can have multiple packages).</li>
+          <li>Each <strong>Package</strong> can have at most one associated <strong>Reservation</strong> (0..1).</li>
+          <li>Some client attributes are optional (gender, mobile, year of birth).</li>
+          <li>Business context notes “Madrid as origin”; origin is not persisted in the current schema (candidate enhancement).</li>
+        </ul>
+
+        <h3>Constraints</h3>
+        <ul class="small" style="margin:0 0 0 18px;">
+          <li>Target database: <strong>PostgreSQL</strong>.</li>
+          <li>Minimal entity set (3 core entities) to keep the model focused.</li>
+          <li>Integrity enforced primarily via database constraints (PK/FK/UNIQUE/NOT NULL).</li>
+        </ul>
+
+        <hr class="rule" />
+
+        <h2 id="requirements" class="anchor">Requirements</h2>
+
+        <h3>Functional Requirements (FR)</h3>
+        <table aria-label="Functional requirements">
+          <thead>
+            <tr>
+              <th style="width:18%">ID</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>FR-01</strong></td><td>Register a client with mandatory identity/contact fields; optional demographics permitted.</td></tr>
+            <tr><td><strong>FR-02</strong></td><td>Create a package purchase and associate it to an existing client.</td></tr>
+            <tr><td><strong>FR-03</strong></td><td>Record a reservation linked to a package; prevent multiple reservations per package.</td></tr>
+            <tr><td><strong>FR-04</strong></td><td>Retrieve booking history (packages and reservation details) by client.</td></tr>
+            <tr><td><strong>FR-05</strong></td><td>Support baseline operational/reporting questions via repeatable SQL queries.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top:16px;">Non-functional Requirements (NFR)</h3>
+        <table aria-label="Non-functional requirements">
+          <thead>
+            <tr>
+              <th style="width:18%">ID</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>NFR-01</strong></td><td>Enforce data integrity via PK/FK constraints; prevent orphan records.</td></tr>
+            <tr><td><strong>NFR-02</strong></td><td>Maintain consistent identifiers and aligned datatypes for keys and references.</td></tr>
+            <tr><td><strong>NFR-03</strong></td><td>Currency safety: prefer <strong>DECIMAL</strong> for price to avoid floating-point precision issues.</td></tr>
+            <tr><td><strong>NFR-04</strong></td><td>Maintainable structure: readable schema with documentation and extension points.</td></tr>
+            <tr><td><strong>NFR-05</strong></td><td>Privacy by design: store only required personal data; keep optional attributes optional.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top:16px;">MoSCoW Prioritisation</h3>
+        <table aria-label="MoSCoW prioritisation">
+          <thead>
+            <tr>
+              <th>Must</th>
+              <th>Should</th>
+              <th>Could</th>
+              <th>Won’t (this iteration)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="pill must">Client table with PK</span><br/>
+                <span class="pill must">Package linked to Client (FK)</span><br/>
+                <span class="pill must">Reservation max 1 per Package</span><br/>
+                <span class="pill must">PK/FK/UNIQUE constraints</span><br/>
+                <span class="pill must">Baseline reporting queries</span>
+              </td>
+              <td>
+                <span class="pill">Bulk import via CSV</span><br/>
+                <span class="pill">Money stored as DECIMAL</span><br/>
+                <span class="pill">Datatype alignment checks</span><br/>
+                <span class="pill">Standardised enums (types)</span>
+              </td>
+              <td>
+                <span class="pill">Audit fields (created_at)</span><br/>
+                <span class="pill">Views for common reporting</span><br/>
+                <span class="pill">Origin city persisted</span>
+              </td>
+              <td>
+                <span class="pill wont">Payments/refunds</span><br/>
+                <span class="pill wont">Cancellations/modifications</span><br/>
+                <span class="pill wont">Supplier inventory</span><br/>
+                <span class="pill wont">Auth/roles</span><br/>
+                <span class="pill wont">Promotions/discount engine</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr class="rule" />
+
+        <h2 id="modelling" class="anchor">Requirements Modelling</h2>
+
+        <h3>Booking lifecycle / process overview</h3>
+        <div class="card" style="padding:14px; border-radius:18px; margin-top:10px;">
+          <!-- Inline SVG (no Mermaid dependency) -->
+          <svg viewBox="0 0 920 150" width="100%" height="150" role="img" aria-label="Booking lifecycle flow">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="rgba(19,214,193,.35)"/>
+                <stop offset="1" stop-color="rgba(29,8,94,.12)"/>
+              </linearGradient>
+              <filter id="s" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(29,8,94,.12)"/>
+              </filter>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(29,8,94,.65)"/>
+              </marker>
+            </defs>
+
+            <rect x="10" y="24" width="210" height="72" rx="16" fill="url(#g1)" stroke="rgba(29,8,94,.18)" filter="url(#s)"/>
+            <text x="115" y="58" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#1d085e">Client registered</text>
+
+            <rect x="250" y="24" width="210" height="72" rx="16" fill="url(#g1)" stroke="rgba(29,8,94,.18)" filter="url(#s)"/>
+            <text x="355" y="58" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#1d085e">Package created</text>
+            <text x="355" y="78" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="rgba(52,58,64,.75)">linked to client</text>
+
+            <rect x="490" y="24" width="210" height="72" rx="16" fill="url(#g1)" stroke="rgba(29,8,94,.18)" filter="url(#s)"/>
+            <text x="595" y="58" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#1d085e">Reservation created</text>
+            <text x="595" y="78" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="rgba(52,58,64,.75)">Max 1 per package</text>
+
+            <rect x="730" y="24" width="180" height="72" rx="16" fill="url(#g1)" stroke="rgba(29,8,94,.18)" filter="url(#s)"/>
+            <text x="820" y="58" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#1d085e">Reporting</text>
+
+            <line x1="220" y1="60" x2="250" y2="60" stroke="rgba(29,8,94,.65)" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="460" y1="60" x2="490" y2="60" stroke="rgba(29,8,94,.65)" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="700" y1="60" x2="730" y2="60" stroke="rgba(29,8,94,.65)" stroke-width="3" marker-end="url(#arrow)"/>
+          </svg>
+        </div>
+
+        <h3>Business rules (captured and enforced)</h3>
+        <table aria-label="Business rules">
+          <thead>
+            <tr>
+              <th style="width:18%">ID</th>
+              <th>Rule</th>
+              <th style="width:24%">Implementation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>BR-01</strong></td>
+              <td>A client can purchase many packages; each package belongs to one client.</td>
+              <td>FK: <code>"Package"."ClientID" → "Client"."ClientID"</code></td>
+            </tr>
+            <tr>
+              <td><strong>BR-02</strong></td>
+              <td>A package can have at most one associated reservation (0..1).</td>
+              <td>FK + <code>UNIQUE(Reservation.PackageCode)</code></td>
+            </tr>
+            <tr>
+              <td><strong>BR-03</strong></td>
+              <td>Gender, mobile, and year of birth are optional fields.</td>
+              <td><code>NULL</code> allowed</td>
+            </tr>
+            <tr>
+              <td><strong>BR-04</strong></td>
+              <td>Madrid is the business context origin city.</td>
+              <td>Documented (not enforced in DB)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr class="rule" />
+
+        <h2 id="stories" class="anchor">User Stories & Acceptance Criteria</h2>
+
+        <div class="card" style="margin-top:10px;">
+          <h3 style="margin-top:0;">US-01 — Create a client profile</h3>
+          <p class="small"><strong>As a</strong> booking agent, <strong>I want</strong> to register a client with a unique ID and contact details, <strong>so that</strong> bookings can be reliably linked to the right person.</p>
+          <ul class="small" style="margin:0 0 0 18px;">
+            <li>ClientID is unique and not null.</li>
+            <li>Optional fields may be missing without blocking inserts.</li>
+            <li>Duplicate ClientID is rejected by the DB.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3 style="margin-top:0;">US-02 — Create a package linked to an existing client</h3>
+          <p class="small"><strong>As a</strong> booking agent, <strong>I want</strong> to create a package purchase for a client, <strong>so that</strong> we can track what each client bought.</p>
+          <ul class="small" style="margin:0 0 0 18px;">
+            <li>Package references an existing ClientID (FK enforced).</li>
+            <li>Package creation fails for non-existing ClientID.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3 style="margin-top:0;">US-03 — Record a reservation for a package (max 1 per package)</h3>
+          <p class="small"><strong>As a</strong> booking agent, <strong>I want</strong> to record a reservation for a package, <strong>so that</strong> each purchase has a confirmed booking.</p>
+          <ul class="small" style="margin:0 0 0 18px;">
+            <li>Reservation must reference an existing PackageCode (FK enforced).</li>
+            <li>Second reservation for the same package is rejected (UNIQUE constraint).</li>
+            <li>Missing mandatory reservation fields fails validation.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3 style="margin-top:0;">US-04 — Retrieve client booking history</h3>
+          <p class="small"><strong>As a</strong> support agent, <strong>I want</strong> to retrieve a client’s packages and reservations, <strong>so that</strong> I can confirm details and resolve enquiries.</p>
+          <ul class="small" style="margin:0 0 0 18px;">
+            <li>Booking history returns packages and reservation details via joins.</li>
+            <li>Optional client fields do not prevent retrieval.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3 style="margin-top:0;">US-05 — Answer baseline reporting questions</h3>
+          <p class="small"><strong>As a</strong> data analyst, <strong>I want</strong> standard queries that map business questions to SQL, <strong>so that</strong> reporting is repeatable and auditable.</p>
+          <ul class="small" style="margin:0 0 0 18px;">
+            <li>Defined reporting queries are reproducible and use enforced relationships.</li>
+          </ul>
+        </div>
+
+        <hr class="rule" />
+
+        <h2 id="data-model" class="anchor">Data Model & Dictionary (Evidence)</h2>
+        <p class="small">
+          The model includes three tables: <strong>"Client"</strong>, <strong>"Package"</strong>, and <strong>"Reservation"</strong>.
+          Relationships are enforced via PK/FK constraints, with a one-to-one-at-most enforcement between Package and Reservation (a package can have 0..1 reservation).
+        </p>
+
+        <table aria-label="Data dictionary summary">
+          <thead>
+            <tr>
+              <th style="width:22%">Table</th>
+              <th style="width:26%">Key fields</th>
+              <th>Other fields (summary)</th>
+              <th style="width:24%">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>"Client"</strong></td>
+              <td><code>"ClientID" (PK)</code></td>
+              <td>"FirstName", "LastName", "Email", "Gender" (nullable), "MobileNumber" (nullable), "YearOfBirth" (nullable)</td>
+              <td>ClientID is a 15-character identifier (passport / national ID style)</td>
+            </tr>
+            <tr>
+              <td><strong>"Package"</strong></td>
+              <td><code>"PackageCode" (PK)</code><br/><code>"ClientID" (FK)</code></td>
+              <td>"Destination", "TransportType" (nullable), "AccommodationType" (nullable)</td>
+              <td>One client can have many packages</td>
+            </tr>
+            <tr>
+              <td><strong>"Reservation"</strong></td>
+              <td><code>"ReservationID" (PK)</code><br/><code>"PackageCode" (FK + UNIQUE)</code></td>
+              <td>"TravelDate", "Price", "NumberOfPeople" (nullable)</td>
+              <td>UNIQUE enforces 0..1 reservation per package</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout" style="margin-top:12px;">
+          <strong>Evidence:</strong>
+          <ul class="small" style="margin:8px 0 0 18px;">
+            <li>ERD diagram: <a href="./assets/erd/ERD.pgerd.png">assets/erd/ERD.pgerd.png</a></li>
+            <li>pgAdmin ERD file: <a href="./assets/erd/ERD.pgerd">assets/erd/ERD.pgerd</a></li>
+            <li>Schema (PostgreSQL): <a href="./src/sql/schema.sql">src/sql/schema.sql</a></li>
+            <li>Validation &amp; reporting queries: <a href="./src/sql/validation_queries.sql">src/sql/validation_queries.sql</a></li>
+          </ul>
+        </div>
+
+        <hr class="rule" />
+
+        <h2 id="traceability" class="anchor">Traceability (mini RTM)</h2>
+        <table aria-label="Traceability matrix">
+          <thead>
+            <tr>
+              <th style="width:16%">Requirement</th>
+              <th style="width:34%">Data artefact (table/field)</th>
+              <th style="width:24%">Rule/constraint</th>
+              <th>Test/query (example)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FR-01</strong></td>
+              <td><code>"Client"."ClientID"</code></td>
+              <td>PK + NOT NULL</td>
+              <td><code>SELECT "ClientID", COUNT(*) FROM "Client" GROUP BY "ClientID" HAVING COUNT(*) &gt; 1;</code></td>
+            </tr>
+            <tr>
+              <td><strong>FR-02</strong></td>
+              <td><code>Package.ClientID</code></td>
+              <td>FK → <code>"Client"."ClientID"</code></td>
+              <td><code>SELECT p.* FROM "Package" p LEFT JOIN "Client" c ON p."ClientID"=c."ClientID" WHERE c."ClientID" IS NULL;</code></td>
+            </tr>
+            <tr>
+              <td><strong>FR-03</strong></td>
+              <td><code>Reservation.PackageCode</code></td>
+              <td>FK → <code>Package.PackageCode</code> + UNIQUE</td>
+              <td><code>SELECT PackageCode, COUNT(*) FROM Reservation GROUP BY PackageCode HAVING COUNT(*) &gt; 1;</code></td>
+            </tr>
+            <tr>
+              <td><strong>BR-02</strong></td>
+              <td><code>Package.PackageCode</code> ↔ <code>Reservation.PackageCode</code></td>
+              <td>Coverage check (design intent)</td>
+              <td><code>SELECT p."PackageCode" FROM "Package" p LEFT JOIN "Reservation" r ON r."PackageCode"=p."PackageCode" WHERE r."PackageCode" IS NULL;</code></td>
+            </tr>
+            <tr>
+              <td><strong>NFR-03</strong></td>
+              <td><code>Reservation.Price</code></td>
+              <td>Prefer DECIMAL over FLOAT</td>
+              <td><code>-- Price uses NUMERIC(11,2) in the schema (see schema.sql)</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr class="rule" />
+
+        <h2 id="validation" class="anchor">Validation & Outcomes</h2>
+        <h3>What was validated</h3>
+        <ul class="small" style="margin:0 0 0 18px;">
+          <li><strong>Primary key integrity:</strong> no null/duplicate IDs for "Client", "Package", "Reservation".</li>
+          <li><strong>Foreign key integrity:</strong> no package without a valid client; no reservation without a valid package.</li>
+          <li><strong>0..1 enforcement:</strong> a package cannot have more than one reservation (UNIQUE constraint).</li>
+          <li><strong>Nullable vs mandatory fields:</strong> optional attributes accept nulls; reservation core fields treated as mandatory.</li>
+          <li><strong>Datatype alignment:</strong> ensure FK columns match referenced PK datatype/length.</li>
+        </ul>
+
+        <h3>Example integrity checks</h3>
+        <pre><code>-- Orphan packages (should return 0 rows)
+SELECT p.*
+FROM "Package" p
+LEFT JOIN "Client" c ON c."ClientID" = p."ClientID"
+WHERE c."ClientID" IS NULL;
+
+-- Duplicate reservations per package (should return 0 rows)
+SELECT "PackageCode", COUNT(*) AS n
+FROM "Reservation"
+GROUP BY "PackageCode"
+HAVING COUNT(*) &gt; 1;</code></pre>
+
+        <hr class="rule" />
+
+        <h2 id="risks" class="anchor">Risks & Next Steps</h2>
+
+        <h3>Risks / limitations</h3>
+        <ul class="small" style="margin:0 0 0 18px;">
+          <li><strong>Domain simplification:</strong> real booking systems require cancellations, amendments, payments, and supplier inventory.</li>
+          <li><strong>Money datatype:</strong> "Price" uses NUMERIC(11,2) to avoid floating-point rounding issues.</li>
+          <li><strong>Origin city not persisted:</strong> “Madrid as origin” is documented but not stored/enforced.</li>
+          <li><strong>Enum drift:</strong> transport/accommodation values can drift without reference tables.</li>
+          <li><strong>Test data realism:</strong> mock data may not reflect real distributions or edge cases.</li>
+        </ul>
+
+        <h3>Next steps (iteration 2)</h3>
+        <ul class="small" style="margin:0 0 0 18px;">
+          <li>Add <strong>cancellation/amendment</strong> entities and timestamps for auditability.</li>
+          <li>Introduce reference tables for <strong>Destination</strong>, <strong>TransportType</strong>, and <strong>AccommodationType</strong>.</li>
+          <li>Add <strong>OriginCity</strong> if it is a genuine reporting requirement; enforce via default/constraint.</li>
+          <li>Create a repeatable <strong>validation suite</strong> (queries + expected results) and BI-friendly views.</li>
+          <li>Extend privacy model (retention/anonymisation) if personal data scope grows.</li>
+        </ul>
+
+        <div class="footer">
+          <div>Prepared for BA-focused portfolio presentation • UK English • White theme (NAVY/TEAL brand palette)</div>
+          <div class="muted">Last updated: <span id="lastUpdated"></span></div>
+        </div>
+      </main>
+
+      <aside class="card">
+        <h2>Contents</h2>
+        <p class="muted small" style="margin-top:-4px;">Quick navigation for reviewers.</p>
+        <div class="toc">
+          <a href="#executive-summary">Executive Summary</a>
+          <a href="#context">Business Context & Goals</a>
+          <a href="#stakeholders">Stakeholders & Pain Points</a>
+          <a href="#scope">Scope, Assumptions & Constraints</a>
+          <a href="#requirements">Requirements + MoSCoW</a>
+          <a href="#modelling">Requirements Modelling</a>
+          <a href="#stories">User Stories & Acceptance Criteria</a>
+          <a href="#data-model">Data Model & Dictionary</a>
+          <a href="#traceability">Traceability (mini RTM)</a>
+          <a href="#validation">Validation & Outcomes</a>
+          <a href="#risks">Risks & Next Steps</a>
+        </div>
+
+        <hr class="rule"/>
+
+        <h2>Artefacts</h2>
+        <div class="callout">
+          <strong>Appendix PDF:</strong><br/>
+          <a href="./travel_agency_erd.pdf">ERD & Relational Model</a>
+        </div>
+        <div class="callout" style="margin-top:10px;">
+          <strong>Technical page:</strong><br/>
+          <a href="./travel_agency_database.html">Schema + SQL examples</a>
+        </div>
+
+        <hr class="rule"/>
+
+        <h2>Notes</h2>
+        <p class="small muted">
+          This page is designed to read in ~3–6 minutes and is structured to match common BA artefacts:
+          requirements, modelling, traceability, and validation. The ERD is intentionally positioned as evidence (appendix),
+          with the narrative focusing on decision-making and control.
+        </p>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      try{
+        const d = new Date();
+        const fmt = new Intl.DateTimeFormat("en-GB", { year:"numeric", month:"short", day:"2-digit" });
+        document.getElementById("lastUpdated").textContent = fmt.format(d);
+      }catch(e){}
+    })();
+  </script>
+</body>
+</html>

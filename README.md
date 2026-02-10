@@ -81,11 +81,25 @@ psql -d travel_agency -f src/validation_queries.sql
      └─ data/          # CSVs      
 ```
 
-## Notes and limitations
+# Query Outputs (CSV evidence)
 
-- This is a simplified model (no cancellations, payments, inventory, discounts, or user roles).
-- Outcomes are reported as **validation results and design decisions**; no real business impact metrics are claimed.
+This folder contains CSV exports of the SQL queries in `src/validation_queries.sql`.
 
----
+These outputs are included as quick evidence for reviewers who may not run the database locally.
 
-If you’d like to discuss the modelling choices, see the full case study in `index.html`.
+## Mapping (CSV → SQL query)
+
+| File | Query | Purpose |
+|---|---|---|
+| `query1.csv` | R1 | Reservations by month (volume trend) |
+| `query2.csv` | R2 | Revenue (sum of prices) by month |
+| `query3.csv` | R3 | Average booking value by month |
+| `query4.csv` | R4 | Packages per client (repeat purchasing distribution) |
+| `query5.csv` | R5 | Top destinations (by number of packages) |
+| `query6.csv` | R6 | Destination revenue (sum of reservation prices by destination) |
+| `query7.csv` | R7 | Client booking history (join view) |
+| `query8.csv` | R8 | Data completeness snapshot (optional fields coverage) |
+
+## Notes
+- Data is synthetic/demo.
+- To reproduce these outputs, run the corresponding query from `src/validation_queries.sql` in pgAdmin and export the results to CSV.
